@@ -4,6 +4,7 @@ const Board = () => {
   const [state, setState] = useState(Array(9).fill(null));
   const [isXturn, setIsXTurn] = useState(true);
   const checkWinner = () => {
+    console.log(typeof state);
     const winnerLogic = [
       [0, 1, 2],
       [3, 4, 5],
@@ -21,7 +22,11 @@ const Board = () => {
       }
 
     }
-    return false;
+    if (state.every(square => square !== null)) {
+      return "Tie";
+    }
+
+    return null;
   };
 
   const isWinner = checkWinner();
@@ -30,7 +35,7 @@ const Board = () => {
     if(state[index] !== null){
       return;
     }
-    const copyState = { ...state };
+    const copyState = state.slice();
     copyState[index] = isXturn ? "X" : "O";
     setState(copyState);
     setIsXTurn(!isXturn);
@@ -42,7 +47,11 @@ const Board = () => {
     <div className="board-container">
       {isWinner ?  (
         <>
-          <p>{isWinner} won the game!</p>
+           {isWinner === "Tie" ? (
+            <p>It's a tie!</p>
+          ) : (
+            <p>{isWinner} won the game!</p>
+          )}
         <button onClick={handleReset}>Play Again</button>
       </>
       ) : (
